@@ -35,7 +35,7 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :buss_phoenix, BussPhoenix.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "buss_phoenix",
+  password: "",
   database: "buss_phoenix_dev",
   pool_size: 10
