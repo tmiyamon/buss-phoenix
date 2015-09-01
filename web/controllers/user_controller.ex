@@ -18,7 +18,7 @@ defmodule BussPhoenix.UserController do
   def create(conn, %{"user" => user_params}) do
     changeset = User.changeset(%User{}, user_params)
 
-    case Repo.insert(changeset) do
+    case User.signup(changeset) do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "User created successfully.")
