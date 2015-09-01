@@ -19,6 +19,15 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :joken, config_module: Guardian.JWT
+
+config :guardian, Guardian,
+  issuer: "BussPhoenix",
+  ttl: { 30, :days },
+  verify_issuer: true,
+  secret_key: "io1980138019381381470170ruoweirjweorhweriowarwjrowija",
+  serializer: BussPhoenix.GuardianSerializer
+
 config :phoenix, :template_engines,
     slim: PhoenixSlim.Engine
 

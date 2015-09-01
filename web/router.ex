@@ -9,12 +9,17 @@ defmodule BussPhoenix.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :browser_session do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.LoadResource
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", BussPhoenix do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser, :browser_session]
 
     get "/", PageController, :index
     resources "/users", UserController
