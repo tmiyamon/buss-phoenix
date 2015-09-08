@@ -29,17 +29,43 @@ defmodule BussPhoenix.User do
     |> cast(params, @required_fields, @optional_fields)
   end
 
-  def signup(changeset) do
-    if changeset.valid? do
-      user = Repo.insert!(changeset)
-      {:ok, user}
-    else
-      {:error, changeset}
-    end
+  def login_changeset(model, params \\ :empty) do
+    model
+    |> cast(params, ~w(email password), ~w(name))
+    |> validate_password
   end
 
   def set_encrypted_password(changeset) do
     password = Ecto.Changeset.get_field(changeset, :password)
-    change(changeset, %{encrypted_password: Comeonin.Bcrypt.hashpwsalt(password)})
+    change(changeset, %{encrypted_password: encrypt_password(password)})
   end
+
+  def encrypt_password(password) do
+    Comeonin.Bcrypt.hashpwsalt(password)
+  end
+
+  def validate_password(changeset, opts \\ []) do
+    validate_change changeset, :password, {:encrypted, opts}, fn _, password ->
+      stored_encrypted_password = Ecto.Changeset.get_field(changeset, :encrypted_password)
+      if !Comeonin.Bcrypt.checkpw(password, stored_encrypted_password) do
+        [{:password, "Wrong email or password"}]
+      else
+        []
+      end
+    end
+  end
+
+  def by_email(query, email) do
+    from u in query,
+    where: u.email == ^email
+  end
+
+  def current_user(conn) do
+    Guardian.Plug.current_resource(conn)
+  end
+
+  def signed_in?(conn) do
+    !is_nil(current_user(conn))
+  end
+
 end

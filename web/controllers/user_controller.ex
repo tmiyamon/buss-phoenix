@@ -3,6 +3,7 @@ defmodule BussPhoenix.UserController do
 
   alias BussPhoenix.User
 
+  plug Guardian.Plug.EnsureAuthenticated, on_failure: { BussPhoenix.SessionController, :new }
   plug :scrub_params, "user" when action in [:create, :update]
 
   def index(conn, _params) do
@@ -18,7 +19,7 @@ defmodule BussPhoenix.UserController do
   def create(conn, %{"user" => user_params}) do
     changeset = User.changeset(%User{}, user_params)
 
-    case User.signup(changeset) do
+    case Repo.insert(changeset) do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "User created successfully.")

@@ -22,6 +22,12 @@ defmodule BussPhoenix.Router do
     pipe_through [:browser, :browser_session]
 
     get "/", PageController, :index
+
+    get "/login", SessionController, :new, as: :login
+    post "/login", SessionController, :create, as: :login
+    delete "/logout", SessionController, :delete, as: :logout
+    get "/logout", SessionController, :delete, as: :logout
+
     resources "/users", UserController
   end
 
