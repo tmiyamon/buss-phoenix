@@ -1,6 +1,6 @@
-h2 Login
+h2 Signup
 
-= form_for @changeset, login_path(@conn, :create), [method: "post"], fn f ->
+= form_for @changeset, signup_path(@conn, :create), fn f ->
   = unless Enum.empty?(@changeset.errors) do
     .alert.alert-danger
       ul.list-unstyled
@@ -8,6 +8,10 @@ h2 Login
           li
             /= humanize(attr)
             = message
+
+  .form-group
+    = label f, :name, "Name", class: "control-label"
+    = text_input f, :name, class: "form-control"
 
   .form-group
     = label f, :email, "Email", class: "control-label"
@@ -20,4 +24,4 @@ h2 Login
   .form-group
     = submit "Submit", class: "btn btn-primary"
 
-= link "Signup is here", to: signup_path(@conn, :new)
+= link "Login is here", to: login_path(@conn, :new)

@@ -27,6 +27,8 @@ defmodule BussPhoenix.Router do
     post "/login", SessionController, :create, as: :login
     delete "/logout", SessionController, :delete, as: :logout
     get "/logout", SessionController, :delete, as: :logout
+    get "/signup", SignupController, :new, as: :signup
+    post "/signup", SignupController, :create, as: :signup
 
     resources "/users", UserController
   end
